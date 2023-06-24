@@ -24,9 +24,9 @@ public class ProdutosDAO {
             statement.setString(3, produto.getStatus());
 
             statement.executeUpdate();  // Executa a operação de inserção
-
+            JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso");
         } catch (SQLException e) {
-            System.out.println("Erro ao cadastrar o produto: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto.  ("+e.getMessage()+")");
         } finally {
             if (conn != null) {
                 try {
