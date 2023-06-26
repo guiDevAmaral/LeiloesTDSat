@@ -39,6 +39,29 @@ public class ProdutosDAO {
         }
     }
 
+    public void venderProduto(int id) {
+        conectaDAO dao = new conectaDAO();
+        Connection conn = dao.connectDB();
+
+        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Produto vendido com sucesso");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao vender o produto. (" + e.getMessage() + ")");
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    System.out.println("Erro ao fechar a conexão com o banco de dados: " + e.getMessage());
+                }
+            }
+        }
+    }
+
     public List<ProdutosDTO> listarProdutos() {
         List<ProdutosDTO> produtos = new ArrayList<>();
 
