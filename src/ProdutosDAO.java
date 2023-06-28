@@ -101,5 +101,45 @@ public class ProdutosDAO {
 
         return produtos;
     }
+    
+    public List<ProdutosDTO> listarProdutosVendidos() {
+        List<ProdutosDTO> produtos = new ArrayList<>();
+
+        Connection conn = null;
+        try {
+            conn = new conectaDAO().connectDB();
+
+            String sql = "SELECT * FROM produtos WHERE status LIKE 'Vendido'";
+
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+
+                    while (resultSet.next()) {
+                        int id = resultSet.getInt("id");
+                        String nome = resultSet.getString("nome");
+                        int valor = resultSet.getInt("valor");
+                        String status = resultSet.getString("status");
+
+                        ProdutosDTO produto = new ProdutosDTO(id, nome, valor, status);
+                        produtos.add(produto);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar produtos: " + e.getMessage());
+        } finally {
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    System.out.println("Erro ao fechar a conexão com o banco de dados: " + e.getMessage());
+                }
+            }
+        }
+
+        return produtos;
+    }
 
 }
